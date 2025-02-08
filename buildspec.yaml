@@ -1,0 +1,31 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.9  # Adjust based on your Lambda runtime
+    commands:
+      - echo "Installing dependencies..."
+      # - pip install --upgrade pip
+      # - pip install -r requirements.txt -t .
+
+  pre_build:
+    commands:
+      - echo "Running pre-build tasks..."
+      # - python -m unittest discover tests  # Run tests if available
+
+  build:
+    commands:
+      - echo "Zipping Lambda function..."
+      - zip -r deployment.zip . -x "tests/*" ".git/*"
+
+  post_build:
+    commands:
+      - echo "Uploading deployment package to S3..."
+      # - aws s3 cp deployment.zip s3://your-s3-bucket-name/
+      - echo "Build completed successfully."
+
+artifacts:
+  files:
+    - deployment.zip
+  discard-paths: yes
